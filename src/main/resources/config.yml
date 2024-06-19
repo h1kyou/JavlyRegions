@@ -1,0 +1,44 @@
+# ░░█░▄▀█░█░█░█░█▄█
+# █▄█░█▀█░▀▄▀░█▄░█░
+#
+# Автор: h1kyou (feat. er1one) (vk.me/h1kyou)
+# Версия: 1.7
+# Зависимости: WorldGuard, PlaceholderAPI
+#
+# Команды:
+# /regions reload - Перезагружает конфигурацию (Право: regions.reload)
+#
+# Плейсхолдеры:
+# %javlyregions_name - Название региона
+# %javlyregions_custom - Название кастомного региона
+# %javlyregions_owners - Владельцы региона
+
+# Сообщения
+messages:
+  no-permissions: "&cУ вас нет прав."
+  config-reloaded: "&aКонфиг перезагружен."
+  reload-usage: "&aИспользуйте: &e/regions reload"
+
+# Настройки
+settings:
+  # Является ли ActionBar постоянным.
+  # Если true, ActionBar будет отображаться постоянно, иначе временно, а затем исчезнет.
+  persistent-actionbar: true
+  update_time: 1.5  # Частота обновления (в секундах)
+  disabled-worlds: null # Отключение отображения региона в конкретных мирах (оставьте null, если не используется)
+    # - "WORLD"
+    # - "NETHER"
+    # - "WORLD_THE_END"
+
+# Форматы
+formats:
+  global: "&8▪ &e&lНЕТ РЕГИОНА &8▪"
+  region: "&c❌ &c&lТЕРРИТОРИЯ ЗАНЯТА &7(%javlyregions_name%) &7(%javlyregions_owners%) &c❌"
+  owner: "&e▪ &a&lВАШ РЕГИОН &7(%javlyregions_name%) &e▪"
+  member: "&e▪ &a&lУЧАСТНИК РЕГИОНА &7(%javlyregions_name%) &e▪"
+
+# Кастомные регионы
+custom-regions:
+  spawn: "&e▪ &c&lСПАВН &e▪"                          # Формат для региона спавна
+  shop: "&e▪ &c&lМАГАЗИН &e▪"                         # Формат для региона магазина
+  pvp: "&e▪ &c&lПВП &e▪"                              # Формат для региона ПВП
