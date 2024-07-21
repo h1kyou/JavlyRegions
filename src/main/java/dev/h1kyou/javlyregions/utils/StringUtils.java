@@ -7,14 +7,22 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtils {
+
+    private static final Map<UUID, BossBar> playerBossBars = new HashMap<>();
 
     /**
      * Заменяет символы цвета в строке на соответствующие цветовые коды.
@@ -49,35 +57,111 @@ public class StringUtils {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color(PlaceholderAPI.setPlaceholders(player, message))));
     }
 
+    public static void sendBossBar(Player player, String message) {
+        ConfigManager configManager = JavlyRegions.getConfigManager();
+
+        String title = color(PlaceholderAPI.setPlaceholders(player, message));
+        BarColor color = configManager.getBossBarColor();
+        BarStyle style = configManager.getBossBarStyle();
+        boolean isPersistent = configManager.isPersistentDisplay();
+
+        BossBar bossBar = Bukkit.createBossBar(title, color, style);
+        UUID playerUUID = player.getUniqueId();
+
+        clearPlayerBossBar(player);
+
+        bossBar.addPlayer(player);
+        playerBossBars.put(playerUUID, bossBar);
+
+        if (!isPersistent) {
+            Double displayDurationSeconds = configManager.getBossBarDuration();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    clearPlayerBossBar(player);
+                }
+            }.runTaskLater(JavlyRegions.getInstance(), (long) (displayDurationSeconds * 20L));
+        }
+    }
+
     /**
-     * Отправляет отредактированное сообщение в ActionBar игроку на основе региона.
+     * Удаляет BossBar у игрока.
+     *
+     * @param player Игрок, у которого нужно удалить BossBar.
+     */
+    private static void clearPlayerBossBar(Player player) {
+        UUID playerUUID = player.getUniqueId();
+        BossBar bossBar = playerBossBars.remove(playerUUID);
+
+        if (bossBar != null) {
+            bossBar.removePlayer(player);
+        }
+    }
+
+    /**
+     * Удаляет BossBar у всех игроков.
+     */
+    public static void clearBossBars() {
+        for (Map.Entry<UUID, BossBar> entry : playerBossBars.entrySet()) {
+            BossBar bossBar = entry.getValue();
+            if (bossBar != null) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    bossBar.removePlayer(player);
+                }
+            }
+        }
+        playerBossBars.clear();
+    }
+
+    /**
+     * Отправляет отредактированное сообщение в ActionBar и BossBar игроку на основе региона.
      *
      * @param player     игрок, которому отправляется сообщение
      * @param region     регион, для которого определяется сообщение
-     * @param playerUUID UUID игрока
      */
-    public static void sendActionBarBasedOnRegion(Player player, ProtectedRegion region, UUID playerUUID) {
+    public static void displayRegionInfo(Player player, ProtectedRegion region) {
         ConfigManager configManager = JavlyRegions.getConfigManager();
 
+        boolean isActionBarEnabled = configManager.isActionBarEnabled();
+        boolean isBossBarEnabled = configManager.isBossBarEnabled();
+
+        String title = (region == null) ? configManager.getGlobalTitle() : getRegionTitle(configManager, region, player.getUniqueId());
+
+        if (isActionBarEnabled) {
+            sendActionBar(player, title);
+        }
+
+        if (isBossBarEnabled) {
+            sendBossBar(player, title);
+        }
+    }
+
+    /**
+     * Определяет заголовок сообщения региона на основе конфигурации и принадлежности игрока.
+     *
+     * @param configManager  конфигурация
+     * @param region         регион
+     * @param playerUUID     UUID игрока
+     * @return               заголовок сообщения
+     */
+    private static String getRegionTitle(ConfigManager configManager, ProtectedRegion region, UUID playerUUID) {
         String regionName = region.getId();
         Set<UUID> ownerUUIDs = region.getOwners().getUniqueIds();
 
         String customRegionTitle = configManager.getCustomRegion(regionName);
         if (customRegionTitle != null) {
-            StringUtils.sendActionBar(player, customRegionTitle);
-            return;
+            return customRegionTitle;
         }
 
-        String title;
         if (ownerUUIDs.contains(playerUUID)) {
-            title = configManager.getOwnerTitle();
-        } else if (region.getMembers().contains(playerUUID)) {
-            title = configManager.getMemberTitle();
-        } else {
-            title = configManager.getRegionTitle();
+            return configManager.getOwnerTitle();
         }
 
-        StringUtils.sendActionBar(player, title);
+        if (region.getMembers().contains(playerUUID)) {
+            return configManager.getMemberTitle();
+        }
+
+        return configManager.getRegionTitle();
     }
 
     /**

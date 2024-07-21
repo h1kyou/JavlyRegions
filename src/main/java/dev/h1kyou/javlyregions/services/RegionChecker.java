@@ -47,34 +47,34 @@ public class RegionChecker implements Runnable {
         Location playerLocation = player.getLocation();
         ProtectedRegion currentRegion = JavlyRegions.getRegionManager().getRegionWithMaxPriority(player, playerLocation);
         ProtectedRegion lastRegion = lastPlayerRegions.get(playerUUID);
-        boolean isActionBarPersistent = configManager.getPersistentActionBarBoolean();
+        boolean isPersistent = configManager.isPersistentDisplay();
 
-        if (isActionBarPersistent) {
-            updatePlayerRegion(player, playerLocation);
+        if (!isPersistent) {
+            if (currentRegion != null && !currentRegion.equals(lastRegion)) {
+                StringUtils.displayRegionInfo(player, currentRegion);
+                lastPlayerRegions.put(playerUUID, currentRegion);
+            } else if (currentRegion == null && lastRegion != null) {
+                StringUtils.displayRegionInfo(player, null);
+                lastPlayerRegions.remove(playerUUID);
+            }
             return;
         }
 
-        if (currentRegion != null && !currentRegion.equals(lastRegion)) {
-            StringUtils.sendActionBarBasedOnRegion(player, currentRegion, playerUUID);
-            lastPlayerRegions.put(playerUUID, currentRegion);
-        } else if (currentRegion == null && lastRegion != null) {
-            StringUtils.sendActionBar(player, configManager.getGlobalTitle());
-            lastPlayerRegions.remove(playerUUID);
-        }
+        updatePlayerRegion(player, playerLocation);
     }
 
     private void updatePlayerRegion(Player player, Location location) {
         ApplicableRegionSet regions = JavlyRegions.getRegionManager().getRegions(location);
 
         if (regions.size() == 0) {
-            StringUtils.sendActionBar(player, configManager.getGlobalTitle());
-        } else {
-            ProtectedRegion maxPriorityRegion = JavlyRegions.getRegionManager().getRegionWithMaxPriority(player, location);
+            StringUtils.displayRegionInfo(player, null);
+            return;
+        }
 
-            if (maxPriorityRegion != null) {
-                UUID playerUUID = player.getUniqueId();
-                StringUtils.sendActionBarBasedOnRegion(player, maxPriorityRegion, playerUUID);
-            }
+        ProtectedRegion maxPriorityRegion = JavlyRegions.getRegionManager().getRegionWithMaxPriority(player, location);
+
+        if (maxPriorityRegion != null) {
+            StringUtils.displayRegionInfo(player, maxPriorityRegion);
         }
     }
 

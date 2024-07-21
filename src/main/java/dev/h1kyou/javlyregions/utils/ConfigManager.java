@@ -1,6 +1,9 @@
 package dev.h1kyou.javlyregions.utils;
 
 import dev.h1kyou.javlyregions.JavlyRegions;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -18,8 +21,13 @@ public class ConfigManager {
     private String region;
     private String owner;
     private String member;
-    private boolean persistentActionBar;
+    private BarColor bossBarColor;
+    private BarStyle bossBarStyle;
     private double updateTime;
+    private double bossBarDuration;
+    private boolean persistentDisplay;
+    private boolean actionBar;
+    private boolean bossBar;
 
     public ConfigManager(FileConfiguration configuration) {
         loadConfiguration(configuration);
@@ -56,19 +64,34 @@ public class ConfigManager {
     private void loadSettings(FileConfiguration configuration) {
         ConfigurationSection section = configuration.getConfigurationSection("settings");
         if (section != null) {
-            this.persistentActionBar = section.getBoolean("persistent-actionbar");
+            this.persistentDisplay = section.getBoolean("persistent-display");
+            this.actionBar = section.getBoolean("actionbar-enabled");
+            this.bossBar = section.getBoolean("bossbar.enabled");
             this.updateTime = section.getDouble("update_time");
             this.disabledWorlds.addAll(section.getStringList("disabled-worlds"));
+        }
+
+        if (!actionBar && !bossBar) {
+            JavlyRegions javlyRegions = JavlyRegions.getInstance();
+            Bukkit.getLogger().warning("Enable display ActionBar or BossBar in the configuration!");
+            javlyRegions.getPluginLoader().disablePlugin(javlyRegions);
         }
     }
 
     private void loadFormats(FileConfiguration configuration) {
-        ConfigurationSection section = configuration.getConfigurationSection("formats");
-        if (section != null) {
-            this.global = StringUtils.color(section.getString("global"));
-            this.region = StringUtils.color(section.getString("region"));
-            this.owner = StringUtils.color(section.getString("owner"));
-            this.member = StringUtils.color(section.getString("member"));
+        ConfigurationSection bossbarSection = configuration.getConfigurationSection("settings.bossbar");
+        if (bossbarSection != null && bossBar) {
+            this.bossBarDuration = bossbarSection.getDouble("duration");
+            this.bossBarColor = BarColor.valueOf(bossbarSection.getString("color"));
+            this.bossBarStyle = BarStyle.valueOf(bossbarSection.getString("style"));
+        }
+
+        ConfigurationSection formatsSection = configuration.getConfigurationSection("formats");
+        if (formatsSection != null) {
+            this.global = StringUtils.color(formatsSection.getString("global"));
+            this.region = StringUtils.color(formatsSection.getString("region"));
+            this.owner = StringUtils.color(formatsSection.getString("owner"));
+            this.member = StringUtils.color(formatsSection.getString("member"));
         }
     }
 
@@ -112,8 +135,28 @@ public class ConfigManager {
         return member;
     }
 
-    public boolean getPersistentActionBarBoolean() {
-        return persistentActionBar;
+    public Double getBossBarDuration() {
+        return bossBarDuration;
+    }
+
+    public BarColor getBossBarColor() {
+        return bossBarColor;
+    }
+
+    public BarStyle getBossBarStyle() {
+        return bossBarStyle;
+    }
+
+    public boolean isPersistentDisplay() {
+        return persistentDisplay;
+    }
+
+    public boolean isActionBarEnabled() {
+        return actionBar;
+    }
+
+    public boolean isBossBarEnabled() {
+        return bossBar;
     }
 
     public double getUpdateTime() {

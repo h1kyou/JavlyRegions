@@ -1,7 +1,7 @@
 package dev.h1kyou.javlyregions;
 
 import com.sk89q.worldguard.WorldGuard;
-import dev.h1kyou.javlyregions.commands.RegionsCommand;
+import dev.h1kyou.javlyregions.commands.ReloadCommand;
 import dev.h1kyou.javlyregions.interfaces.IRegionManager;
 import dev.h1kyou.javlyregions.managers.LegacyRegionManager;
 import dev.h1kyou.javlyregions.managers.ModernRegionManager;
@@ -9,6 +9,7 @@ import dev.h1kyou.javlyregions.metrics.Metrics;
 import dev.h1kyou.javlyregions.services.RegionChecker;
 import dev.h1kyou.javlyregions.utils.ConfigManager;
 import dev.h1kyou.javlyregions.utils.RegionsExpansion;
+import dev.h1kyou.javlyregions.utils.StringUtils;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
@@ -38,6 +39,11 @@ public final class JavlyRegions extends JavaPlugin {
         regionChecker.start();
     }
 
+    @Override
+    public void onDisable() {
+        StringUtils.clearBossBars();
+    }
+
     private void setupRegionManager() {
         regionManager = isVersionNewest() ? new ModernRegionManager(WorldGuard.getInstance().getPlatform()) : new LegacyRegionManager();
     }
@@ -52,7 +58,7 @@ public final class JavlyRegions extends JavaPlugin {
     }
 
     private void setupCommands() {
-        CommandExecutor commandExecutor = new RegionsCommand();
+        CommandExecutor commandExecutor = new ReloadCommand();
         getCommand("regions").setExecutor(commandExecutor);
         getCommand("regions").setTabCompleter((TabCompleter) commandExecutor);
     }

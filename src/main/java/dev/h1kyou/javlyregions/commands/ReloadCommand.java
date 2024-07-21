@@ -2,6 +2,7 @@ package dev.h1kyou.javlyregions.commands;
 
 import dev.h1kyou.javlyregions.JavlyRegions;
 import dev.h1kyou.javlyregions.utils.ConfigManager;
+import dev.h1kyou.javlyregions.utils.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,8 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
-public class RegionsCommand implements CommandExecutor, TabCompleter {
+public class ReloadCommand implements CommandExecutor, TabCompleter {
 
     private final ConfigManager configManager = JavlyRegions.getConfigManager();
 
@@ -31,6 +31,7 @@ public class RegionsCommand implements CommandExecutor, TabCompleter {
         }
 
         configManager.reloadConfiguration();
+        StringUtils.clearBossBars();
         sender.sendMessage(configManager.getConfigReloadedMessage());
         return true;
     }

@@ -2,7 +2,7 @@
 # █▄█░█▀█░▀▄▀░█▄░█░
 #
 # Автор: h1kyou (feat. er1one) (vk.me/h1kyou)
-# Версия: 1.7
+# Версия: 1.8
 # Зависимости: WorldGuard, PlaceholderAPI
 #
 # Команды:
@@ -21,21 +21,46 @@ messages:
 
 # Настройки
 settings:
-  # Является ли ActionBar постоянным.
-  # Если true, ActionBar будет отображаться постоянно, иначе временно, а затем исчезнет.
-  persistent-actionbar: true
-  update_time: 1.5  # Частота обновления (в секундах)
-  disabled-worlds: null # Отключение отображения региона в конкретных мирах (оставьте null, если не используется)
+
+  # Определяет, будет ли отображение постоянным или временным.
+  # Если значение false, отображение будет временным и исчезнет после истечения времени.
+  persistent-display: true
+
+  # Определяет, будут ли отображаться регионы через ActionBar.
+  # Если значение false, видим будет только BossBar.
+  actionbar-enabled: true
+
+  # Отображение через BossBar
+  bossbar:
+    # Будет ли отображение через BossBar
+    enabled: false
+
+    # Время в секундах, через которое BossBar исчезнет после его появления,
+    # если отображение временное
+    duration: 2.5
+
+    # Цвет BossBar
+    color: RED
+
+    # Стиль BossBar
+    style: SOLID
+
+  # Частота обновления (в секундах)
+  update_time: 1.5
+
+  # Отключение отображения региона в конкретных мирах
+  # Оставьте null, если не используется
+  disabled-worlds: null
     # - "WORLD"
     # - "NETHER"
     # - "WORLD_THE_END"
 
 # Форматы
 formats:
-  global: "&8▪ &e&lНЕТ РЕГИОНА &8▪"
-  region: "&c❌ &c&lТЕРРИТОРИЯ ЗАНЯТА &7(%javlyregions_name%) &7(%javlyregions_owners%) &c❌"
-  owner: "&e▪ &a&lВАШ РЕГИОН &7(%javlyregions_name%) &e▪"
-  member: "&e▪ &a&lУЧАСТНИК РЕГИОНА &7(%javlyregions_name%) &e▪"
+  global: "&#888888▪ &#FFFF00&lНЕТ РЕГИОНА &#888888▪"
+  region: "&#FF0000❌ &#FF0000&lТЕРРИТОРИЯ ЗАНЯТА &#CCCCCC(%javlyregions_name%) &#CCCCCC(%javlyregions_owners%) &#FF0000❌"
+  owner: "&#FFFF00▪ &#00FF00&lВАШ РЕГИОН &#CCCCCC(%javlyregions_name%) &#FFFF00▪"
+  member: "&#FFFF00▪ &#00FF00&lУЧАСТНИК РЕГИОНА &#CCCCCC(%javlyregions_name%) &#FFFF00▪"
 
 # Кастомные регионы
 custom-regions:

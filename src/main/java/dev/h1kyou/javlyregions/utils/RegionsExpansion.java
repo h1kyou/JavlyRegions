@@ -1,6 +1,7 @@
 package dev.h1kyou.javlyregions.utils;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import dev.h1kyou.javlyregions.JavlyRegions;
 import dev.h1kyou.javlyregions.interfaces.IRegionManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
@@ -31,7 +32,7 @@ public class RegionsExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.6";
+        return JavlyRegions.getInstance().getDescription().getVersion();
     }
 
     @Override

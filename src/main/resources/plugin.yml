@@ -1,7 +1,9 @@
 name: JavlyRegions
-version: '1.7'
+version: '${project.version}'
 main: dev.h1kyou.javlyregions.JavlyRegions
-depend: [PlaceholderAPI, WorldGuard]
+depends:
+  - PlaceholderAPI
+  - WorldGuard
 author: h1kyou
 website: https://vk.me/h1kyou
 permissions:
