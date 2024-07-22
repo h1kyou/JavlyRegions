@@ -38,6 +38,10 @@ public class RegionChecker implements Runnable {
             World playerWorld = player.getWorld();
             for (String world : disabledWorlds) {
                 if (world != null && playerWorld.getName().equalsIgnoreCase(world)) {
+                    if (configManager.isBossBarEnabled()) {
+                        StringUtils.clearPlayerBossBar(player);
+                    }
+
                     return;
                 }
             }

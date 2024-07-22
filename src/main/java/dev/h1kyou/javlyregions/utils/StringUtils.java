@@ -89,7 +89,7 @@ public class StringUtils {
      *
      * @param player Игрок, у которого нужно удалить BossBar.
      */
-    private static void clearPlayerBossBar(Player player) {
+    public static void clearPlayerBossBar(Player player) {
         UUID playerUUID = player.getUniqueId();
         BossBar bossBar = playerBossBars.remove(playerUUID);
 
