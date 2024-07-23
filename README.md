@@ -1,11 +1,5 @@
-﻿<br/>
-<p align="center">
-  <a href="https://github.com/h1kyou/JavlyRegions"></a>
-  <h3 align="center">JavlyRegions</h3>
-  <p align="center">Плагин для Minecraft, который отображает регион в ActionBar/BossBar, в котором находится игрок.
-  <br/>
-  <br/>
-</p>
+<img src="https://i.ibb.co/12BB3ys/logo.png" alt="logo" border="0">
+<img src="https://i.ibb.co/dJgcPYM/banner.png" alt="banner" border="0">
 
 ## Команды и права
 | Команда            | Право            | Описание                        |
