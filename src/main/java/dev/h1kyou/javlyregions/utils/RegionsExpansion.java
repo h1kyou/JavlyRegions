@@ -3,6 +3,7 @@ package dev.h1kyou.javlyregions.utils;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import dev.h1kyou.javlyregions.JavlyRegions;
 import dev.h1kyou.javlyregions.interfaces.IRegionManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -44,16 +45,16 @@ public class RegionsExpansion extends PlaceholderExpansion {
     public String onPlaceholderRequest(Player player, @NotNull String params) {
         ProtectedRegion protectedRegion = regionManager.getRegionWithMaxPriority(player, player.getLocation());
 
-        if (protectedRegion == null) {
-            return null;
-        }
-
         switch (params.toLowerCase()) {
+            case "title":
+                String parsedTitle = PlaceholderAPI.setPlaceholders(player, StringUtils.getRegionTitleForPlayer(player, protectedRegion));
+                return StringUtils.color(parsedTitle);
             case "name":
-                return protectedRegion.getId();
+                return protectedRegion != null ? protectedRegion.getId() : null;
             case "custom":
-                return configManager.getCustomRegion(protectedRegion.getId());
+                return protectedRegion != null ? configManager.getCustomRegion(protectedRegion.getId()) : null;
             case "owners":
+                if (protectedRegion == null) return null;
                 Set<UUID> ownerUUIDs = protectedRegion.getOwners().getUniqueIds();
                 return StringUtils.getOwnersNamesString(ownerUUIDs);
         }

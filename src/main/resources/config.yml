@@ -2,16 +2,17 @@
 # █▄█░█▀█░▀▄▀░█▄░█░
 #
 # Автор: h1kyou (feat. er1one) (vk.me/h1kyou)
-# Версия: 1.8
+# Версия: 1.9
 # Зависимости: WorldGuard, PlaceholderAPI
 #
 # Команды:
 # /regions reload - Перезагружает конфигурацию (Право: regions.reload)
 #
 # Плейсхолдеры:
-# %javlyregions_name - Название региона
-# %javlyregions_custom - Название кастомного региона
-# %javlyregions_owners - Владельцы региона
+# %javlyregions_title% - Заголовок региона
+# %javlyregions_name% - Название WorldGuard региона
+# %javlyregions_custom% - Имя кастомного региона
+# %javlyregions_owners% - Владельцы региона
 
 # Сообщения
 messages:

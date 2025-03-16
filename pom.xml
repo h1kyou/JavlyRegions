@@ -6,7 +6,7 @@
 
     <groupId>dev.h1kyou</groupId>
     <artifactId>JavlyRegions</artifactId>
-    <version>1.8</version>
+    <version>1.9</version>
     <packaging>jar</packaging>
 
     <name>JavlyRegions</name>
@@ -54,10 +54,12 @@
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
@@ -70,6 +72,7 @@
             <artifactId>spigot-api</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>

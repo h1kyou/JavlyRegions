@@ -114,10 +114,21 @@ public class StringUtils {
     }
 
     /**
-     * Отправляет отредактированное сообщение в ActionBar и BossBar игроку на основе региона.
+     * Получает заголовок для региона/игрока.
      *
-     * @param player     игрок, которому отправляется сообщение
-     * @param region     регион, для которого определяется сообщение
+     * @param player Игрок, для которого получаем заголовок
+     * @param region Регион (может быть null для глобального заголовка)
+     * @return Заголовок с учетом настроек
+     */
+    public static String getRegionTitleForPlayer(Player player, ProtectedRegion region) {
+        ConfigManager configManager = JavlyRegions.getConfigManager();
+        return (region == null)
+                ? configManager.getGlobalTitle()
+                : getRegionTitle(configManager, region, player.getUniqueId());
+    }
+
+    /**
+     * Отправляет информацию о регионе через ActionBar/BossBar
      */
     public static void displayRegionInfo(Player player, ProtectedRegion region) {
         ConfigManager configManager = JavlyRegions.getConfigManager();
@@ -125,7 +136,7 @@ public class StringUtils {
         boolean isActionBarEnabled = configManager.isActionBarEnabled();
         boolean isBossBarEnabled = configManager.isBossBarEnabled();
 
-        String title = (region == null) ? configManager.getGlobalTitle() : getRegionTitle(configManager, region, player.getUniqueId());
+        String title = getRegionTitleForPlayer(player, region);
 
         if (isActionBarEnabled) {
             sendActionBar(player, title);
@@ -142,7 +153,7 @@ public class StringUtils {
      * @param configManager  конфигурация
      * @param region         регион
      * @param playerUUID     UUID игрока
-     * @return               заголовок сообщения
+     * @return               Заголовок
      */
     private static String getRegionTitle(ConfigManager configManager, ProtectedRegion region, UUID playerUUID) {
         String regionName = region.getId();
